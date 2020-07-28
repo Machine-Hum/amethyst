@@ -65,9 +65,9 @@ jobs:
         uses: actions/cache@v2
         with:
           path: ~/.sccache
-          key: ${{  runner.os  }}-sccache-${{ steps.install_toolchain.outputs.rustc_hash }}-${{ hashFiles('**/Cargo.toml') }}
+          key: ${{  runner.os  }}-sccache1-${{ steps.install_toolchain.outputs.rustc_hash }}-${{ hashFiles('**/Cargo.toml') }}
           restore-keys: |
-            ${{ runner.os }}-sccache-${{ steps.install_toolchain.outputs.rustc_hash }}-
+            ${{ runner.os }}-sccache1-${{ steps.install_toolchain.outputs.rustc_hash }}-
 
       - name: install rustfmt+clippy on stable
         run: |
@@ -75,9 +75,13 @@ jobs:
           rustup component add clippy
         if: contains(matrix.toolchain, 'stable')
 
-      - name: start sccache
-        run: ~/.sccache/sccache --start-server
-        if: contains(matrix.os, 'macOS') || contains(matrix.os, 'ubuntu')
+      - name: start sccache linux
+        run: ~/.bin/sccache --start-server
+        if: contains(matrix.os, 'ubuntu')
+
+      - name: start sccache macos
+        run: /usr/local/bin/sccache --start-server
+        if: contains(matrix.os, 'macOS')
 
       - name: run rustfmt on stable
         uses: actions-rs/cargo@v1
@@ -99,10 +103,18 @@ jobs:
           command: test
           args: --features=${{matrix.FEATURES}}
 
-      - name: sccache stats
-        run: ~/.sccache/sccache --show-stats
-        if: contains(matrix.os, 'macOS') || contains(matrix.os, 'ubuntu')
+      - name: sccache stats linux
+        run: ~/.bin/sccache --show-stats
+        if: contains(matrix.os, 'ubuntu')
 
-      - name: stop sccache
-        run: ~/.sccache/sccache --stop-server
-        if: contains(matrix.os, 'macOS') || contains(matrix.os, 'ubuntu')
+      - name: sccache stats macos
+        run: /usr/local/bin/sccache --show-stats
+        if: contains(matrix.os, 'macOS')
+
+      - name: stop sccache linux
+        run: ~/.bin/sccache --stop-server
+        if: contains(matrix.os, 'ubuntu')
+
+      - name: stop sccache macos
+        run: /usr/local/bin/sccache --stop-server
+        if: contains(matrix.os, 'macOS')
