@@ -75,6 +75,10 @@ jobs:
           rustup component add clippy
         if: contains(matrix.toolchain, 'stable')
 
+      - name: start sccache
+        run: sccache --start-server
+        if: contains(matrix.os, 'macOS') || contains(matrix.os, 'ubuntu')
+
       - name: run rustfmt on stable
         uses: actions-rs/cargo@v1
         with:
@@ -94,3 +98,11 @@ jobs:
         with:
           command: test
           args: --features=${{matrix.FEATURES}}
+
+      - name: sccache stats
+        run: sccache --show-stats
+        if: contains(matrix.os, 'macOS') || contains(matrix.os, 'ubuntu')
+
+      - name: stop sccache
+        run: sccache --stop-server
+        if: contains(matrix.os, 'macOS') || contains(matrix.os, 'ubuntu')
