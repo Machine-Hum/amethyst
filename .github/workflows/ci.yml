@@ -87,13 +87,13 @@ jobs:
           rustup component add clippy
         if: contains(matrix.toolchain, 'stable')
 
-      - name: start sccache linux
-        run: ~/.bin/sccache --start-server
-        if: contains(matrix.os, 'ubuntu')
-
-      - name: start sccache macos
-        run: /usr/local/bin/sccache --start-server
-        if: contains(matrix.os, 'macos')
+#      - name: start sccache linux
+#        run: ~/.bin/sccache --start-server
+#        if: contains(matrix.os, 'ubuntu')
+#
+#      - name: start sccache macos
+#        run: /usr/local/bin/sccache --start-server
+#        if: contains(matrix.os, 'macos')
 
       - name: run rustfmt on stable
         uses: actions-rs/cargo@v1
@@ -121,10 +121,10 @@ jobs:
         run: /usr/local/bin/sccache --show-stats
         if: contains(matrix.os, 'macos')
 
-      - name: stop sccache linux
-        run: ~/.bin/sccache --stop-server
-        if: contains(matrix.os, 'ubuntu')
-
-      - name: stop sccache macos
-        run: /usr/local/bin/sccache --stop-server
-        if: contains(matrix.os, 'macos')
+#      - name: stop sccache linux
+#        run: ~/.bin/sccache --stop-server
+#        if: contains(matrix.os, 'ubuntu')
+#
+#      - name: stop sccache macos
+#        run: /usr/local/bin/sccache --stop-server
+#        if: contains(matrix.os, 'macos')
