@@ -33,8 +33,8 @@ jobs:
 #          FEATURES: vulkan
         - os: ubuntu-latest
           FEATURES: vulkan
-          RUSTC_WRAPPER: $HOME/.bin/sccache
-          SCCACHE_DIR: $HOME/.sccache
+          RUSTC_WRAPPER: ${{ github.workspace }}/.bin/sccache
+          SCCACHE_DIR: ${{ github.workspace }}/.sccache
     env:
       RUSTC_WRAPPER: ${{ matrix.RUSTC_WRAPPER }}
       SCCACHE_DIR: ${{ matrix.SCCACHE_DIR }}
