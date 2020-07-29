@@ -29,8 +29,8 @@ jobs:
           FEATURES: metal
           RUSTC_WRAPPER: /usr/local/bin/sccache
           SCCACHE_DIR: ~/.sccache
-        - os: windows-latest
-          FEATURES: vulkan
+#        - os: windows-latest
+#          FEATURES: vulkan
         - os: ubuntu-latest
           FEATURES: vulkan
           RUSTC_WRAPPER: ~/.bin/sccache
