@@ -33,8 +33,11 @@ jobs:
 #          FEATURES: vulkan
         - os: ubuntu-latest
           FEATURES: vulkan
-          RUSTC_WRAPPER: ~/.bin/sccache
-          SCCACHE_DIR: ~/.sccache
+          RUSTC_WRAPPER: $HOME/.bin/sccache
+          SCCACHE_DIR: $HOME/.sccache
+    env:
+      RUSTC_WRAPPER: ${{ matrix.RUSTC_WRAPPER }}
+      SCCACHE_DIR: ${{ matrix.SCCACHE_DIR }}
     steps:
       - uses: actions/checkout@v2
 
@@ -83,15 +86,6 @@ jobs:
           rustup component add rustfmt
           rustup component add clippy
         if: contains(matrix.toolchain, 'stable')
-
-      - name: build rust w/sccache
-        uses: actions-rs/cargo@v1
-        with:
-          command: build
-          args:
-        env:
-          RUSTC_WRAPPER: ${{ matrix.RUSTC_WRAPPER }}
-          SCCACHE_DIR: ${{ matrix.SCCACHE_DIR }}
 
 #      - name: start sccache linux
 #        run: ~/.bin/sccache --start-server
