@@ -53,7 +53,7 @@ jobs:
           mkdir .bin
           curl -fo .bin/sccache https://ci-mirrors.rust-lang.org/rustc/2018-04-02-sccache-x86_64-unknown-linux-musl
           chmod +x .bin/sccache
-          echo "::set-env name=RUSTC_WRAPPER::${CWD}/.bin/sccache"
+          echo "::set-env name=RUSTC_WRAPPER::$(cwd)/.bin/sccache"
         if: contains(matrix.os, 'ubuntu')
 
       - name: install macos deps
