@@ -77,7 +77,9 @@ jobs:
         if: contains(matrix.toolchain, 'stable')
 
       - name: start sccache
-        run: sccache --start-server
+        run: |
+          mkdir .cache
+          $RUSTC_WRAPPER --start-server
 
       - name: plain run rustfmt
         run: cargo fmt --all -- --check
