@@ -41,13 +41,13 @@ jobs:
     steps:
       - uses: actions/checkout@v2
 
-      - name: create sccache dir macos
-        run: mkdir ~/.sccache
-        if: contains(matrix.os, 'macos')
-
-      - name: create sccache dir linux
-        run: mkdir ~/.sccache
-        if: contains(matrix.os, 'ubuntu')
+#      - name: create sccache dir macos
+#        run: mkdir ~/.sccache
+#        if: contains(matrix.os, 'macos')
+#
+#      - name: create sccache dir linux
+#        run: mkdir ~/.sccache
+#        if: contains(matrix.os, 'ubuntu')
 
       - name: install linux deps
 # URL for sccache obtained from https://github.com/rust-lang/rust/blob/a4dd850720369d9e5b9df91820b23cddb2badc06/src/ci/docker/scripts/sccache.sh
