@@ -20,8 +20,10 @@ jobs:
     strategy:
       fail-fast: true
       matrix:
-        os: [macOS-latest, windows-latest, ubuntu-latest]
-        toolchain: [stable, beta, nightly]
+        os: [macos-latest, ubuntu-latest]
+#        os: [macos-latest, windows-latest, ubuntu-latest]
+        toolchain: [stable]
+#        toolchain: [stable, beta, nightly]
         include:
         - os: macos-latest
           FEATURES: metal
@@ -33,7 +35,9 @@ jobs:
           FEATURES: vulkan
           RUSTC_WRAPPER: ~/.bin/sccache
           SCCACHE_DIR: ~/.sccache
-
+      env:
+        RUSTC_WRAPPER: ${{ matrix.RUSTC_WRAPPER }}
+        SCCACHE_DIR: ${{ matrix.SCCACHE_DIR }}
     steps:
       - uses: actions/checkout@v2
 
