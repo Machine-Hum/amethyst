@@ -50,10 +50,10 @@ jobs:
         run: |
           sudo apt update
           sudo apt install gcc pkg-config openssl libasound2-dev cmake build-essential python3 libfreetype6-dev libexpat1-dev libxcb-composite0-dev libssl-dev libx11-dev
-          mkdir ./bin
-          curl -fo ./bin/sccache https://ci-mirrors.rust-lang.org/rustc/2018-04-02-sccache-x86_64-unknown-linux-musl
-          chmod +x ./bin/sccache
-          echo "::add-path::./bin/sccache"
+          mkdir .bin
+          curl -fo .bin/sccache https://ci-mirrors.rust-lang.org/rustc/2018-04-02-sccache-x86_64-unknown-linux-musl
+          chmod +x .bin/sccache
+          echo "::set-env name=RUSTC_WRAPPER::${CWD}/.bin/sccache"
         if: contains(matrix.os, 'ubuntu')
 
       - name: install macos deps
