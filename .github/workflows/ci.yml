@@ -28,13 +28,13 @@ jobs:
         - os: macos-latest
           FEATURES: metal
           RUSTC_WRAPPER: /usr/local/bin/sccache
-          SCCACHE_DIR: ~/.sccache
+          SCCACHE_DIR: ${{ runner.temp }}/.cache
 #        - os: windows-latest
 #          FEATURES: vulkan
         - os: ubuntu-latest
           FEATURES: vulkan
-          RUSTC_WRAPPER: ${{ github.workspace }}/.bin/sccache
-          SCCACHE_DIR: ${{ github.workspace }}/.sccache
+          RUSTC_WRAPPER: ${{ runner.temp }}/sccache
+          SCCACHE_DIR: ${{ runner.temp }}/.cache
     env:
       RUSTC_WRAPPER: ${{ matrix.RUSTC_WRAPPER }}
       SCCACHE_DIR: ${{ matrix.SCCACHE_DIR }}
@@ -54,15 +54,14 @@ jobs:
         run: |
           sudo apt update
           sudo apt install gcc pkg-config openssl libasound2-dev cmake build-essential python3 libfreetype6-dev libexpat1-dev libxcb-composite0-dev libssl-dev libx11-dev
-          mkdir ~/.bin
-          curl -fo ~/.bin/sccache https://ci-mirrors.rust-lang.org/rustc/2018-04-02-sccache-x86_64-unknown-linux-musl
-          chmod +x ~/.bin/sccache
+          curl -fo ${{ matrix.RUSTC_WRAPPER }} https://ci-mirrors.rust-lang.org/rustc/2018-04-02-sccache-x86_64-unknown-linux-musl
+          chmod +x ${{ matrix.RUSTC_WRAPPER }}
         if: contains(matrix.os, 'ubuntu')
 
       - name: install macos deps
         run: |
           brew install sccache
-        if: contains(matrix.os, 'macOS')
+        if: contains(matrix.os, 'macos')
 
       - name: install ${{ matrix.toolchain }} toolchain
         id: install_toolchain
@@ -76,10 +75,10 @@ jobs:
       - name: cache amethyst deps
         uses: actions/cache@v2
         with:
-          path: ~/.sccache
-          key: ${{  runner.os  }}-sccache3-${{ steps.install_toolchain.outputs.rustc_hash }}-${{ hashFiles('**/Cargo.toml') }}
+          path: ${{ matrix.SCCACHE_DIR }}
+          key: ${{  runner.os  }}-sccache4-${{ steps.install_toolchain.outputs.rustc_hash }}-${{ hashFiles('**/Cargo.toml') }}
           restore-keys: |
-            ${{ runner.os }}-sccache3-${{ steps.install_toolchain.outputs.rustc_hash }}-
+            ${{ runner.os }}-sccache4-${{ steps.install_toolchain.outputs.rustc_hash }}-
 
       - name: install rustfmt+clippy on stable
         run: |
@@ -110,16 +109,10 @@ jobs:
         if: contains(matrix.toolchain, 'stable')
 
       - name: run tests
-        run: |
-          cargo test --features=${{matrix.FEATURES}}
+        run: cargo test --features=${{matrix.FEATURES}}
 
-      - name: sccache stats linux
-        run: ~/.bin/sccache --show-stats
-        if: contains(matrix.os, 'ubuntu')
-
-      - name: sccache stats macos
-        run: /usr/local/bin/sccache --show-stats
-        if: contains(matrix.os, 'macos')
+      - name: sccache stats
+        run: ${{ matrix.RUSTC_WRAPPER }} --show-stats
 
 #      - name: stop sccache linux
 #        run: ~/.bin/sccache --stop-server
