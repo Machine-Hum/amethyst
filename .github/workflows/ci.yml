@@ -92,6 +92,10 @@ jobs:
 #        run: /usr/local/bin/sccache --start-server
 #        if: contains(matrix.os, 'macos')
 
+      - name: plain run rustfmt
+        run: cargo fmt --all -- --check
+        if: contains(matrix.toolchain, 'stable')
+
       - name: run rustfmt on stable
         uses: actions-rs/cargo@v1
         with:
