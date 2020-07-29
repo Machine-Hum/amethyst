@@ -34,7 +34,7 @@ jobs:
     env:
       RUSTC_WRAPPER: sccache
       SCCACHE_DIR: .cache
-      SCCACHE_IDLE_TIMEOUT: 0
+      SCCACHE_IDLE_TIMEOUT: 20
     steps:
       - uses: actions/checkout@v2
 
