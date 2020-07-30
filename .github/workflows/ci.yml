@@ -29,9 +29,6 @@ jobs:
           FEATURES: vulkan
         - os: ubuntu-latest
           FEATURES: vulkan
-#    env:
-#      RUSTC_WRAPPER: sccache
-#      SCCACHE_DIR: .cache
     steps:
       - uses: actions/checkout@v2
 
@@ -40,15 +37,8 @@ jobs:
           sudo apt update
           sudo apt install gcc pkg-config openssl libasound2-dev cmake build-essential python3 libfreetype6-dev libexpat1-dev libxcb-composite0-dev libssl-dev libx11-dev
           mkdir .bin
-# URL for sccache obtained from https://github.com/rust-lang/rust/blob/a4dd850720369d9e5b9df91820b23cddb2badc06/src/ci/docker/scripts/sccache.sh
-#          curl -fo .bin/sccache https://ci-mirrors.rust-lang.org/rustc/2018-04-02-sccache-x86_64-unknown-linux-musl
-#          chmod +x .bin/sccache
-#          echo "::set-env name=RUSTC_WRAPPER::$(pwd)/.bin/sccache"
         if: contains(matrix.os, 'ubuntu')
 
-#      - name: install macos deps
-#        run: brew install sccache
-#        if: contains(matrix.os, 'macos')
 
       - name: install ${{ matrix.toolchain }} toolchain
         id: install_toolchain
@@ -59,24 +49,11 @@ jobs:
           # Don't use a 'components:' entry--we don't need them with beta/nightly, plus nightly often doesn't have them
           override: true
 
-#      - name: cache amethyst deps
-#        uses: actions/cache@v2
-#        with:
-#          path: .cache
-#          key: ${{  runner.os  }}-sccache-${{ steps.install_toolchain.outputs.rustc_hash }}-${{ hashFiles('**/Cargo.toml') }}
-#          restore-keys: |
-#            ${{ runner.os }}-sccache-${{ steps.install_toolchain.outputs.rustc_hash }}-
-
       - name: install rustfmt+clippy on stable
         run: |
           rustup component add rustfmt
           rustup component add clippy
         if: contains(matrix.toolchain, 'stable')
-
-#      - name: start sccache
-#        run: |
-#          mkdir .cache
-#          $RUSTC_WRAPPER --start-server
 
       - name: run rustfmt on stable
         uses: actions-rs/cargo@v1
@@ -95,13 +72,3 @@ jobs:
       - name: run tests
         run: cargo test --features=${{matrix.FEATURES}}
 
-#      - name: sccache stats
-#        run: ${{ matrix.RUSTC_WRAPPER }} --show-stats
-
-#      - name: stop sccache linux
-#        run: ~/.bin/sccache --stop-server
-#        if: contains(matrix.os, 'ubuntu')
-#
-#      - name: stop sccache macos
-#        run: /usr/local/bin/sccache --stop-server
-#        if: contains(matrix.os, 'macos')
