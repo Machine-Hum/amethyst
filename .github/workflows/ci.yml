@@ -36,7 +36,6 @@ jobs:
         run: |
           sudo apt update
           sudo apt install gcc pkg-config openssl libasound2-dev cmake build-essential python3 libfreetype6-dev libexpat1-dev libxcb-composite0-dev libssl-dev libx11-dev
-          mkdir .bin
         if: contains(matrix.os, 'ubuntu')
 
 
@@ -72,3 +71,25 @@ jobs:
       - name: run tests
         run: cargo test --features=${{matrix.FEATURES}}
 
+      - name: run mdbook tests
+        run: mdbook test -L ./target/debug/deps book
+        if: contains(matrix.toolchain, 'stable')
+
+#  docs:
+#    name: Docs
+#    runs-on: ${{ matrix.os }}
+#    strategy:
+#      fail-fast: true
+#      matrix:
+#        os: [ubuntu-latest]
+#        toolchain: [stable]
+#        include:
+#          - os: ubuntu-latest
+#            FEATURES: empty
+#    steps:
+#      - uses: actions/checkout@v2
+#
+#      - name: install linux deps
+#        run: |
+#          sudo apt update
+#          sudo apt install gcc pkg-config openssl libasound2-dev cmake build-essential python3 libfreetype6-dev libexpat1-dev libxcb-composite0-dev libssl-dev libx11-dev
