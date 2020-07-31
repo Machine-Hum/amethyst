@@ -79,11 +79,10 @@ jobs:
 
       - name: install mdbook-linkcheck on stable linux
         run: |
-          mkdir .bin
-          curl -L https://github.com/Michael-F-Bryan/mdbook-linkcheck/releases/download/v0.7.0/mdbook-linkcheck-v0.7.0-x86_64-unknown-linux-gnu.tar.gz | tar -xz > .bin/mdbook-linkcheck
-          chmod a+x .bin/mdbook-linkcheck
-          echo "::add-path::.bin"
+          curl -L https://github.com/Michael-F-Bryan/mdbook-linkcheck/releases/download/v0.7.0/mdbook-linkcheck-v0.7.0-x86_64-unknown-linux-gnu.tar.gz | tar -xz > /usr/share/rust/.cargo/bin/mdbook-linkcheck
+          chmod a+x /usr/share/rust/.cargo/bin/mdbook-linkcheck
           echo -e "\n\n[output.linkcheck]" >> book/book.toml
+          ls -l /usr/share/rust/.cargo/bin
         if: contains(matrix.toolchain, 'stable') && contains(matrix.os, 'ubuntu')
 
       - name: build mdbook on stable linux
