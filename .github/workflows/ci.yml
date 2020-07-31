@@ -69,7 +69,10 @@ jobs:
         if: contains(matrix.toolchain, 'stable')
 
       - name: run tests
-        run: cargo test --features=${{matrix.FEATURES}}
+        uses: actions-rs/cargo@v1
+        with:
+          command: test
+          args: --workspace --features=${{matrix.FEATURES}}
 
       - name: install mdbook on stable linux
         uses: peaceiris/actions-mdbook@v1
