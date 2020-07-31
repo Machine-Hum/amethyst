@@ -71,25 +71,25 @@ jobs:
       - name: run tests
         run: cargo test --features=${{matrix.FEATURES}}
 
-      - name: run mdbook tests
-        run: mdbook test -L ./target/debug/deps book
-        if: contains(matrix.toolchain, 'stable')
+      - name: install mdbook on stable linux
+        uses: peaceiris/actions-mdbook@v1
+        with:
+          mdbook-version: 'latest'
+        if: contains(matrix.toolchain, 'stable') && contains(matrix.os, 'ubuntu')
 
-#  docs:
-#    name: Docs
-#    runs-on: ${{ matrix.os }}
-#    strategy:
-#      fail-fast: true
-#      matrix:
-#        os: [ubuntu-latest]
-#        toolchain: [stable]
-#        include:
-#          - os: ubuntu-latest
-#            FEATURES: empty
-#    steps:
-#      - uses: actions/checkout@v2
-#
-#      - name: install linux deps
-#        run: |
-#          sudo apt update
-#          sudo apt install gcc pkg-config openssl libasound2-dev cmake build-essential python3 libfreetype6-dev libexpat1-dev libxcb-composite0-dev libssl-dev libx11-dev
+      - name: install mdbook-linkcheck on stable linux
+        run: |
+          mkdir .bin
+          curl -L https://github.com/Michael-F-Bryan/mdbook-linkcheck/releases/download/v0.7.0/mdbook-linkcheck-v0.7.0-x86_64-unknown-linux-gnu.tar.gz | tar -xz > .bin/mdbook-linkcheck
+          chmod a+x .bin/mdbook-linkcheck
+          echo "::add-path::.bin"
+          echo -e "\n\n[output.linkcheck]" >> book/book.toml
+        if: contains(matrix.toolchain, 'stable') && contains(matrix.os, 'ubuntu')
+
+      - name: build mdbook on stable linux
+        run: mdbook build book
+        if: contains(matrix.toolchain, 'stable') && contains(matrix.os, 'ubuntu')
+
+      - name: run mdbook tests on stable linux
+        run: mdbook test -L ./target/debug/deps book
+        if: contains(matrix.toolchain, 'stable') && contains(matrix.os, 'ubuntu')
