@@ -90,5 +90,7 @@ jobs:
         if: contains(matrix.toolchain, 'stable') && contains(matrix.os, 'ubuntu')
 
       - name: run mdbook tests on stable linux
-        run: mdbook test -L ./target/debug/deps book
+        run: |
+          ls -al ./target/debug/deps
+          mdbook test -L ./target/debug/deps book
         if: contains(matrix.toolchain, 'stable') && contains(matrix.os, 'ubuntu')
