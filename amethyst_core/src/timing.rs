@@ -292,7 +292,11 @@ mod tests {
     fn get_uncertainty() -> u32 {
         let is_macos = !std::env::var("MACOS").unwrap_or_default().is_empty();
         let is_ci = std::env::var("CI").is_some();
-        if is_macos && is_ci { 20 } else { 10 }
+        if is_macos && is_ci {
+            20
+        } else {
+            10
+        }
     }
 
     #[test]
@@ -308,7 +312,7 @@ mod tests {
         // check that elapsed time was DURATION sec +/- UNCERTAINTY%
         let elapsed = watch.elapsed();
         let duration = Duration::new(DURATION, 0);
-        let lower = duration / 100 * (100 - uncertainty );
+        let lower = duration / 100 * (100 - uncertainty);
         let upper = duration / 100 * (100 + uncertainty);
         assert!(
             elapsed < upper && elapsed > lower,
