@@ -291,7 +291,7 @@ mod tests {
     // Timing varies more on macOS CI
     fn get_uncertainty() -> u32 {
         let is_macos = !std::env::var("MACOS").unwrap_or_default().is_empty();
-        let is_ci = std::env::var("CI").is_some();
+        let is_ci = std::env::var("CI").is_ok();
         if is_macos && is_ci {
             20
         } else {
