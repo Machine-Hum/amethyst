@@ -25,6 +25,7 @@ jobs:
         include:
         - os: macos-latest
           FEATURES: metal
+          MACOS: true
         - os: windows-latest
           FEATURES: vulkan
         - os: ubuntu-latest
@@ -69,7 +70,9 @@ jobs:
         if: contains(matrix.toolchain, 'stable')
 
       - name: run tests
-        run: cargo test --workspace --features=${{matrix.FEATURES}}
+        run: echo "MACOS is -${MACOS}-" && cargo test --workspace --features=${{matrix.FEATURES}}
+        env:
+          MACOS: ${{ MACOS }}
 
       - name: install mdbook on stable linux
         uses: peaceiris/actions-mdbook@v1
