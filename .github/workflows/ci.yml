@@ -80,13 +80,14 @@ jobs:
           mdbook-version: 'latest'
         if: contains(matrix.toolchain, 'stable') && contains(matrix.os, 'macos')
 
-      - name: install mdbook-linkcheck on stable macos
-        run: |
-          curl -L https://github.com/Michael-F-Bryan/mdbook-linkcheck/releases/download/v0.7.0/mdbook-linkcheck-v0.7.0-x86_64-apple-darwin.tar.gz | tar -xz && mv mdbook-linkcheck /Users/runner/.cargo/bin/mdbook-linkcheck
-          chmod a+x /Users/runner/.cargo/bin/mdbook-linkcheck
-          echo -e "\n\n[output.linkcheck]" >> book/book.toml
-          ls -l /Users/runner/.cargo/bin
-        if: contains(matrix.toolchain, 'stable') && contains(matrix.os, 'macos')
+# Should be working, but postponing until after we go live with GitHub Actions
+#      - name: install mdbook-linkcheck on stable macos
+#        run: |
+#          curl -L https://github.com/Michael-F-Bryan/mdbook-linkcheck/releases/download/v0.7.0/mdbook-linkcheck-v0.7.0-x86_64-apple-darwin.tar.gz | tar -xz && mv mdbook-linkcheck /Users/runner/.cargo/bin/mdbook-linkcheck
+#          chmod a+x /Users/runner/.cargo/bin/mdbook-linkcheck
+#          echo -e "\n\n[output.linkcheck]" >> book/book.toml ## PROBABLY REMOVE THIS IN FAVOR OF ALWAYS HAVING IT AS OPTIONAL IN THE CONFIG
+#          ls -l /Users/runner/.cargo/bin
+#        if: contains(matrix.toolchain, 'stable') && contains(matrix.os, 'macos')
 
       - name: build mdbook on stable macos
         run: mdbook build book
