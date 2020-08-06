@@ -93,8 +93,8 @@ jobs:
         run: mdbook build book
         if: contains(matrix.toolchain, 'stable') && contains(matrix.os, 'macos')
 
-      - name: run mdbook tests on stable macos
-        run: |
-          ls -al ./target/debug/deps
-          mdbook test -L ./target/debug/deps book
-        if: contains(matrix.toolchain, 'stable') && contains(matrix.os, 'macos')
+#      - name: run mdbook tests on stable macos
+#        run: |
+#          ls -al ./target/debug/deps
+#          mdbook test -L ./target/debug/deps book
+#        if: contains(matrix.toolchain, 'stable') && contains(matrix.os, 'macos')
