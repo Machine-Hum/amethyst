@@ -74,26 +74,26 @@ jobs:
         env:
           MACOS: ${{ matrix.MACOS }}
 
-      - name: install mdbook on stable linux
+      - name: install mdbook on stable macos
         uses: peaceiris/actions-mdbook@v1
         with:
           mdbook-version: 'latest'
-        if: contains(matrix.toolchain, 'stable') && contains(matrix.os, 'ubuntu')
+        if: contains(matrix.toolchain, 'stable') && contains(matrix.os, 'macos')
 
-      - name: install mdbook-linkcheck on stable linux
+      - name: install mdbook-linkcheck on stable macos
         run: |
-          curl -L https://github.com/Michael-F-Bryan/mdbook-linkcheck/releases/download/v0.7.0/mdbook-linkcheck-v0.7.0-x86_64-unknown-linux-gnu.tar.gz | tar -xz > /usr/share/rust/.cargo/bin/mdbook-linkcheck
-          chmod a+x /usr/share/rust/.cargo/bin/mdbook-linkcheck
+          curl -L https://github.com/Michael-F-Bryan/mdbook-linkcheck/releases/download/v0.7.0/mdbook-linkcheck-v0.7.0-x86_64-apple-darwin.tar.gz | tar -xz > /Users/runner/.cargo/bin/mdbook-linkcheck
+          chmod a+x /Users/runner/.cargo/bin/mdbook-linkcheck
           echo -e "\n\n[output.linkcheck]" >> book/book.toml
           ls -l /usr/share/rust/.cargo/bin
-        if: contains(matrix.toolchain, 'stable') && contains(matrix.os, 'ubuntu')
+        if: contains(matrix.toolchain, 'stable') && contains(matrix.os, 'macos')
 
-      - name: build mdbook on stable linux
+      - name: build mdbook on stable macos
         run: mdbook build book
-        if: contains(matrix.toolchain, 'stable') && contains(matrix.os, 'ubuntu')
+        if: contains(matrix.toolchain, 'stable') && contains(matrix.os, 'macos')
 
-      - name: run mdbook tests on stable linux
+      - name: run mdbook tests on stable macos
         run: |
           ls -al ./target/debug/deps
           mdbook test -L ./target/debug/deps book
-        if: contains(matrix.toolchain, 'stable') && contains(matrix.os, 'ubuntu')
+        if: contains(matrix.toolchain, 'stable') && contains(matrix.os, 'macos')
